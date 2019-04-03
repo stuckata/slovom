@@ -5,7 +5,7 @@ import static com.stoyankirkov.Slovom.toWords;
 public class Main {
 
     public static void main(String[] args) {
-        double amount = 9201634.09;
+        double amount = 2101101733.13;
         System.out.println(toWords(amount));
     }
 }

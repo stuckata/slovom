@@ -5,7 +5,7 @@ public final class Slovom {
     public static String toWords(double amount) {
         String billion = "милиард";
         String million = "милион";
-        String thousand = "хиляди ";
+        String thousand = "хиляди";
         String hundred = "";
         String fractions = "стотинки";
         String numStr = String.format("%.2f", amount);
@@ -45,21 +45,41 @@ public final class Slovom {
 
     private static String addToWords(String[] nums, String count) {
         StringBuilder sb = new StringBuilder();
-        boolean isThousand = count.equals("хиляди ");
+        boolean isThousand = count.equals("хиляди");
         boolean isHundred = count.equals("");
         boolean fractions = count.equals("стотинки");
+        boolean isZero = checkForZeros(nums);
         if (fractions) {
             sb.append(" и ").append(nums[1]).append(nums[2]).append(" ").append(count);
             return sb.toString();
         }
-        sb.append(extractWords(nums, isThousand)).append(" ").append(count);
-        if (!(nums.length == 1 && nums[0].equals("1")) && !isThousand && !isHundred) {
-            sb.append("а ");
+        if (isThousand && nums.length == 1) {
+            if (nums[0].equals("1")) {
+                sb.append("хиляда ");
+            } else {
+                sb.append(extractWords(nums, isThousand)).append(" ").append(count).append(" ");
+            }
+        } else if (!isZero) {
+            sb.append(extractWords(nums, isThousand)).append(" ").append(count);
+            if (!(nums.length == 1 && nums[0].equals("1")) && !isThousand && !isHundred) {
+                sb.append("а ");
+            } else {
+                sb.append(" ");
+            }
         }
         if (isHundred) {
-            sb.append("лева");
+            return sb.toString().trim() + " лева";
         }
         return sb.toString();
+    }
+
+    private static boolean checkForZeros(String[] nums) {
+        for (String num : nums) {
+            if (!num.equals("0")) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private static String[] getNumber(String str, int start) {
@@ -158,7 +178,11 @@ public final class Slovom {
                 }
                 break;
             case "2":
-                sb.append(numbers[2]);
+                if (isThousand) {
+                    sb.append("две");
+                } else {
+                    sb.append(numbers[2]);
+                }
                 break;
             case "3":
                 sb.append(numbers[3]);
