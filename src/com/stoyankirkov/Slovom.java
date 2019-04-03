@@ -8,9 +8,13 @@ public final class Slovom {
         String thousand = "хиляди";
         String hundred = "";
         String fractions = "стотинки";
+        StringBuilder sb = new StringBuilder();
+        if (amount < 0) {
+            sb.append("минус ");
+            amount *= (-1);
+        }
         String numStr = String.format("%.2f", amount);
         String[] nums = numStr.split("");
-        StringBuilder sb = new StringBuilder();
         int start = 0;
 
         if (nums.length > 15) {
@@ -50,7 +54,11 @@ public final class Slovom {
         boolean fractions = count.equals("стотинки");
         boolean isZero = checkForZeros(nums);
         if (fractions) {
-            sb.append(" и ").append(nums[1]).append(nums[2]).append(" ").append(count);
+            sb.append(" и ");
+            if (!nums[1].equals("0")) {
+                sb.append(nums[1]);
+            }
+            sb.append(nums[2]).append(" ").append(count);
             return sb.toString();
         }
         if (isThousand && nums.length == 1) {
@@ -68,6 +76,12 @@ public final class Slovom {
             }
         }
         if (isHundred) {
+            if (nums.length == 1 && nums[0].equals("0")) {
+                sb.append("нула");
+            }
+            if (nums.length == 1 && nums[0].equals("1")) {
+                return sb.toString().trim() + " лев";
+            }
             return sb.toString().trim() + " лева";
         }
         return sb.toString();
