@@ -4,6 +4,7 @@
 Пример:
 
 double amount = 1299746367.12;
+
 String result = Slovom.toWords(amount);
 
 System.out.println(result); 
